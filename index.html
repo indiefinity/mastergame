@@ -1,0 +1,119 @@
+<html>
+    <head>
+        <title>Its a master game!</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://hamham.tk/style.css">
+    </head>
+    <body>
+      <h3>The game can be broken by editing the code but if you actually want to play don't mess with the code!</h3>
+        <div id="selector">
+          <h3>btw, entering the wrong gameid soft locks your client, refreshing fixes it.</h3>
+        <div id="initial">
+                <a href=# id="gotocreate"><button class='wiggle button btn btn-default'>create game!</button></a><a href=# id="gotojoin"><button class='wiggle button btn btn-default'>join game!</button></a>
+        </div>
+        <div id="join" style="display:none">
+        <h1>Join game.</h1>
+        <input type="number" id="joinid" style="height:50px" placeholder="gameid (You can get this from the gamemaster)"></input>
+        <a href=# id=join><button class='wiggle button btn btn-default'>JOIN!</button></a>
+        </div>
+        <div id="create" style="display:none">
+            <h1>Create game.</h1>
+            <input type="number" id="createid"/><a href=# id=create><button class='wiggle button btn btn-default'>CREATE!</button></a>
+        </div></div>
+        <div style="display:none" id="master">
+            <a href=# id="start"><button class='wiggle button btn btn-default'>Start Game</button></a>
+        </div>
+
+
+        <script type="text/javascript">
+        window.gameid
+        window.joined
+        joined = false
+        window.master
+        master = false
+        function join(joinid) {
+          if (!joined) {
+            $.ajax({
+                type: 'POST',
+                url: 'https://nappula.tk/join/' + joinid,
+            success: function(msg){
+                console.log(msg);
+                }
+            });
+          window.joined
+          joined = true
+          window.gameid
+          gameid = joinid
+          document.getElementById('selector').style.display = "none"  
+        }
+        }
+        function create(createid) {
+            $.ajax({
+                type: 'POST',
+                url: 'https://nappula.tk/create/' + createid,
+            success: function(msg){
+                console.log(msg);
+                if(msg == "error") {
+                    alert("a game with that id already exists!")
+                } else {
+                    window.joined
+                    joined = true
+                    window.master
+                    master = true
+                    window.gameid
+                    gameid = createid
+                    document.getElementById('initial').style.display = "none"
+                    document.getElementById('create').style.display = "none"
+                    document.getElementById('join').style.display = "none"
+                    document.getElementById('master').style.display = "block"
+                }
+                }
+            });
+        }
+        function startgame() {
+          if (master) {
+            $.ajax({
+                type: 'POST',
+                url: 'https://nappula.tk/start/' + gameid,
+            success: function(msg){
+                console.log(msg);
+                }
+            });
+          }
+        }
+        $(function() {
+                  $('a#join').bind('click', function() {
+                    if (document.getElementById('joinid').value){
+                    join(document.getElementById('joinid').value)
+                    }
+                    return false;
+                  });
+                });
+        $(function() {
+                  $('a#start').bind('click', function() {
+                    startgame()
+                    return false;
+                  });
+                });
+        $(function() {
+                  $('a#gotocreate').bind('click', function() {
+                    document.getElementById('create').style.display = "block"
+                    return false;
+                  });
+                });
+         $(function() {
+                  $('a#gotojoin').bind('click', function() {
+                    document.getElementById('join').style.display = "block"
+                    return false;
+                  });
+                });
+        $(function() {
+                  $('a#create').bind('click', function() {
+                    create(document.getElementById('createid').value)
+                    return false;
+                  });
+                });
+        </script>
+    </body>
+</html>
