@@ -21,6 +21,7 @@ def create(id):
         f.close()
         jsonObj = json.loads(data)
         jsonObj["started"] = False
+        jsonObj["q"] = '{"q":"If you were a car would you prefer to be","a":"White?","a2":"Black?","a3":"Gray?", "a4":"Yellow?"}'
         f = open("./games/" + id + ".json","w")
         f.seek(0)
         f.write(json.dumps(jsonObj))
@@ -71,6 +72,6 @@ def client(id):
     data = f.read()
     f.close()
     jsonObj = json.loads(data)
-    return jsonObj["q"]#'{"q":"If you were a car would you prefer to be","a":"White?","a2":"Black?","a3":"Gray?", "a4":"Yellow?"}'
+    return jsonObj["q"]
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0')
