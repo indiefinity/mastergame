@@ -24,7 +24,7 @@
         <div style="display:none" id="master">
             <a href=# id="start"><button class='wiggle button btn btn-default'>Start Game</button></a>
         </div>
-        <div id="game">
+        <div id="game" style="display:none">
 
           <h1 id="q"></h1>
           <label>
@@ -153,7 +153,7 @@
                     return false;
                   });
                 });
-        function startTheFuckingGame() {
+        function getQuestion() {
         window.game
           $.ajax({
                 type: 'POST',
