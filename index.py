@@ -19,9 +19,13 @@ def create(id):
         f = open("./games/" + id + ".json","r")
         data = f.read()
         f.close()
+        an = ran.randInt(0,4)
+        sn = ran.randInt(0,4)
+        qf = open("./questions/style1.json")
+        qjson = json.loads(qf.read())
         jsonObj = json.loads(data)
         jsonObj["started"] = False
-        jsonObj["q"] = '{"q":"If you were a car would you prefer to be","a":"White?","a2":"Black?","a3":"Gray?", "a4":"Yellow?"}'
+        jsonObj["q"] = q #'{"q":"If you were a car would you prefer to be","a":"White?","a2":"Black?","a3":"Gray?", "a4":"Yellow?"}'
         f = open("./games/" + id + ".json","w")
         f.seek(0)
         f.write(json.dumps(jsonObj))
