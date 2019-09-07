@@ -1,17 +1,22 @@
 {
     "q":"If you were ",
+    "q2":"what would you do?",
     "s":[
-        "a tomato?",
-        "a car?",
-        "a pig?",
-        "a turtle?",
-        "a computer?"
+        "a tomato, ",
+        "a car, ",
+        "a pig, ",
+        "a turtle, ",
+        "a computer, ",
+        "a human, "
     ],
     "a":[
         "I would eat myself.",
-        "I would awdawdwad",
-		"c",
-		"d",
-		"die"
+        "I would shoot Lauri.",
+        "I would run faster than Usain Bolt.",
+        "I would hug my mom.",
+        "I would call my dad for money.",
+        "I would scream loud as fuck.",
+        "I would drive off a cliff",
+        "I would oink."
     ]
 }
