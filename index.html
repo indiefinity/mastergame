@@ -1,14 +1,14 @@
 <html>
     <head>
-        <title>Its a master game!</title>
+        <title>It's you!'</title>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://hamham.tk/style.css">
     </head>
-    <body>
+    <body style=" -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;">
       <h3>The game can be broken by editing the code but if you actually want to play don't mess with the code!</h3>
+      <h1>Its you!</h1>
         <div id="selector">
-          <h3>btw, entering the wrong gameid soft locks your client, refreshing fixes it.</h3>
         <div id="initial">
                 <a href=# id="gotocreate"><button class='wiggle button btn btn-default'>create game!</button></a><a href=# id="gotojoin"><button class='wiggle button btn btn-default'>join game!</button></a>
         </div>
@@ -24,6 +24,26 @@
         <div style="display:none" id="master">
             <a href=# id="start"><button class='wiggle button btn btn-default'>Start Game</button></a>
         </div>
+        <div id="game">
+
+          <h1 id="q"></h1>
+          <label>
+            <input type="radio" name="a" value="a">
+            <p id="a1">a</p>
+            </label><br/>
+            <label>
+              <input type="radio" name="a" value="b">
+              <p id="a2">b</p>
+              </label><br/>
+              <label>
+                <input type="radio" name="a" value="c">
+                <p id="a3">c</p>
+                </label><br/>
+                <label>
+                  <input type="radio" name="a" value="d">
+                  <p id="a4">d</p>
+                  </label><br/>
+        </div>
 
 
         <script type="text/javascript">
@@ -38,14 +58,33 @@
                 type: 'POST',
                 url: 'https://nappula.tk/join/' + joinid,
             success: function(msg){
-                console.log(msg);
+                if (msg == "error") {
+                  alert("game does not exist!")
+                } else {
+                  window.joined
+                  joined = true
+                  window.gameid
+                  gameid = joinid
+                  document.getElementById('selector').style.display = "none"  
+                  var waitforstart = setInterval(function() {
+                      $.ajax({
+                      type: 'POST',
+                      url: 'https://nappula.tk/ready/' + gameid,
+                      success: function(msg){
+                      if (msg == "started") {
+                          clearInterval(waitforstart)
+                          startTheFuckingGame()
+                      } else {
+                        //nothenk :D
+                      }
+                      console.log(msg)
+                      }
+            });
+                  }, 200)
+                }
                 }
             });
-          window.joined
-          joined = true
-          window.gameid
-          gameid = joinid
-          document.getElementById('selector').style.display = "none"  
+          
         }
         }
         function create(createid) {
@@ -114,6 +153,30 @@
                     return false;
                   });
                 });
+        function startTheFuckingGame() {
+        window.game
+          $.ajax({
+                type: 'POST',
+                url: 'https://nappula.tk/client/' + gameid,
+            success: function(msg){
+                console.log(JSON.parse(msg))
+                game.question = JSON.parse(msg);
+                document.getElementById("a1").innerHTML = game.question.a
+                document.getElementById("a2").innerHTML = game.question.a2
+                document.getElementById("a3").innerHTML = game.question.a3
+                document.getElementById("a4").innerHTML = game.question.a4
+                document.getElementById("q").innerHTML = game.question.q
+                }
+            });
+          //var serverCommunications = setInterval(function() {
+
+          //},100)
+        }
+
+        function sendAnswer() {
+
+        }
+
         </script>
     </body>
 </html>
