@@ -8,6 +8,7 @@
     <body style=" -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;">
       <h3>The game can be broken by editing the code but if you actually want to play don't mess with the code!</h3>
       <h1>Its you!</h1>
+      <a href=# id="ville"><button class='wiggle button btn btn-default'>Ärsytä Villeä (piippaus)</button></a>
         <div id="selector">
         <div id="initial">
                 <a href=# id="gotocreate"><button class='wiggle button btn btn-default'>create game!</button></a><a href=# id="gotojoin"><button class='wiggle button btn btn-default'>join game!</button></a>
@@ -43,10 +44,25 @@
                   <input type="radio" name="a" value="d">
                   <p id="a4">d</p>
                   </label><br/>
+                  <a href=# id="answer"><button class='wiggle button btn btn-default'>Send Answer!</button></a>
         </div>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
 
         <script type="text/javascript">
+        var ws = io()
+        ws.emit("my event", "omnom")
+        ws.on('gamestart', function(data) {
+          getQuestion()
+          document.getElementById("start").style.display = "none"
+          if (master == true) {
+              document.getElementById("next").style.display = "true"
+          }
+        });
+        ws.onclose = function(){
+          ws = io()
+        }
+
         window.gameid
         window.joined
         joined = false
@@ -56,7 +72,7 @@
           if (!joined) {
             $.ajax({
                 type: 'POST',
-                url: 'https://nappula.tk/join/' + joinid,
+                url: window.location + '/join/' + joinid,
             success: function(msg){
                 if (msg == "error") {
                   alert("game does not exist!")
@@ -66,21 +82,6 @@
                   window.gameid
                   gameid = joinid
                   document.getElementById('selector').style.display = "none"  
-                  var waitforstart = setInterval(function() {
-                      $.ajax({
-                      type: 'POST',
-                      url: 'https://nappula.tk/ready/' + gameid,
-                      success: function(msg){
-                      if (msg == "started") {
-                          clearInterval(waitforstart)
-                          startTheFuckingGame()
-                      } else {
-                        //nothenk :D
-                      }
-                      console.log(msg)
-                      }
-            });
-                  }, 200)
                 }
                 }
             });
@@ -90,7 +91,7 @@
         function create(createid) {
             $.ajax({
                 type: 'POST',
-                url: 'https://nappula.tk/create/' + createid,
+                url: window.location + '/create/' + createid,
             success: function(msg){
                 console.log(msg);
                 if(msg == "error") {
@@ -114,7 +115,7 @@
           if (master) {
             $.ajax({
                 type: 'POST',
-                url: 'https://nappula.tk/start/' + gameid,
+                url: window.location + '/start/' + gameid,
             success: function(msg){
                 console.log(msg);
                 }
@@ -138,6 +139,7 @@
         $(function() {
                   $('a#gotocreate').bind('click', function() {
                     document.getElementById('create').style.display = "block"
+                    
                     return false;
                   });
                 });
@@ -153,19 +155,39 @@
                     return false;
                   });
                 });
+        $(function() {
+                  $('a#answer').bind('click', function() {
+                    ws.emit("canswer")
+                    return false;
+                  });
+                });
+        $(function() {
+                  $('a#ville').bind('click', function() {
+                    $.ajax({
+                type: 'POST',
+                url: window.location + '/ville/1',
+            success: function(msg){
+                console.log(msg);
+                }
+            });
+                    return false;
+                  });
+                });
         function getQuestion() {
         window.game
           $.ajax({
                 type: 'POST',
-                url: 'https://nappula.tk/client/' + gameid,
+                url: window.location + '/client/' + gameid,
             success: function(msg){
+                console.log(msg)
+                window.game.que = msg
                 console.log(JSON.parse(msg))
-                game.question = JSON.parse(msg);
-                document.getElementById("a1").innerHTML = game.question.a
-                document.getElementById("a2").innerHTML = game.question.a2
-                document.getElementById("a3").innerHTML = game.question.a3
-                document.getElementById("a4").innerHTML = game.question.a4
-                document.getElementById("q").innerHTML = game.question.q
+                document.getElementById("a1").innerHTML = JSON.parse(msg).a;
+                document.getElementById("a2").innerHTML = JSON.parse(msg).a2;
+                document.getElementById("a3").innerHTML = JSON.parse(msg).a3;
+                document.getElementById("a4").innerHTML = JSON.parse(msg).a4;
+                document.getElementById("q").innerHTML = JSON.parse(msg).q;
+                document.getElementById('game').style.display = "block"
                 }
             });
           //var serverCommunications = setInterval(function() {
