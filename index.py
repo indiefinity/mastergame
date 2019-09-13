@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 import os
-import winsound
 import json
 q = "q"
 from random import randint
