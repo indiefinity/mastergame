@@ -1,6 +1,4 @@
 flask
 flask_socketio
-winsound
-os
 json
 random
